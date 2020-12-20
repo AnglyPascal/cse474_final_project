@@ -6,85 +6,116 @@ from scipy.ndimage import measurements as mm
 import random as rnd
 
 
-# inits the random states
-L = 10
-rng = rn.RandomState(int(rnd.random()*100))
-parents = rng.rand(L, L)
-weights = rng.rand(L, L)
-children = rng.rand(L, L)
+class state:
+    def __init__(self, L, q, dp, dq):
+        self.L  = L
+        self.q  = q
+        self.dp = dp
+        self.dq = dq
 
-# the product quality
-q = .5
+        self.rng      = rn.RandomState(int(rnd.random()*100))
+        self.parents  = self.rng.rand(self.L, self.L)
+        self.weights  = self.rng.rand(self.L, self.L)
+        self.children = self.rng.rand(self.L, self.L)
 
-# inits the initial agents
-init_agent_num = L//2
-agents = []
-# generates some random agents
-for i in range(init_agent_num):
-    pair = (rn.randint(L), rn.randint(L))
-    if pair not in agents:
-        agents.append(pair)
-# stores the people who have already made decisions
-blacklist = []      
+        self.agents    = []                 # these are the agents
+        self.blacklist = []                 # they have made their decisions
+        self.purchased = np.zeros((L, L))   # these have made purchases
 
-# to keep track of who purchased the product
-purchased = np.zeros((L, L))
-
-# generates the neighbors of a site in the lattice
-def neighbors(pair, L):
-    x, y = pair
-    for i in [1, -1]:
-        xx = x + i
-        if 0 <= xx < L:
-            yield (xx, y)
-    for i in [1, -1]:
-        yy = y + i
-        if 0 <= yy < L:
-            yield (x, yy)
-
-# runs the similation
-count = 0
-while len(agents) > 0:
-    # for all agent, let them make the decision remove them from agents, add them to
-    # blacklist if they purchased, add their neighbors to agents if not they are in
-    # blacklist.
-
-    for agent in agents:
-        x, y = agent
-        p = parents[x][y]
-        c = children[x][y]
-        w = weights[x][y]
-       
-        # decision value
-        decision = c * w + p * (1-w)
+    def gen_agents(self, agent_num):        # generates some random agents
+        for i in range(agent_num):
+            pair = (rn.randint(self.L), rn.randint(self.L))
+            if pair not in self.agents:
+                self.agents.append(pair)
         
-        agents.remove(agent)
-        blacklist.append(agent)
+    def is_percolating(self):               # checks if the current state is percolating
+        array = self.purchased
 
-        if decision < q:
-            count += 1
-            purchased[x][y] = True
-            # adding the purchasers neighbors to the list
-            for i in neighbors(pair, L):
-                if i not in agents and i not in blacklist:
-                    agents.append(i)
+        top = False
+        bottom = False
 
-# function to check if the purchased array is percolating
-def if_percolating(array):
-    top = False
-    bottom = False
+        for i in array[0]:
+            if i == 1:
+                top = True
 
-    for i in array[0]:
-        if i == 1:
-            top = True
+        for i in array[-1]:
+            if i == 1:
+                bottom = True
 
-    for i in array[-1]:
-        if i == 1:
-            bottom = True
+        if top and bottom:
+            return True
+        return False
 
-    if top and bottom:
-        return True
-    return False
+    def update(self, agent_num):
+        L = self.L
+        for i in range(L):
+            for j in range(L):
+                if self.purchased[i][j]:
+                    # self.children[i][j] += self.dp
+                    self.parents[i][j] += self.dp
+                else:
+                    # self.children[i][j] -= self.dp
+                    self.parents[i][j] -= self.dp
 
-print(if_percolating(purchased))
-print(purchased)
+        if self.is_percolating():
+            self.q -= self.dq
+        else:
+            self.q += self.dq
+
+        # resetting all the temporary stuffs
+        self.gen_agents(agent_num)
+        self.purchased = np.zeros((L, L))
+        self.blacklist = []
+
+    def neighbors(self, pair, L):
+        x, y = pair
+        for i in [1, -1]:
+            xx = x + i
+            if 0 <= xx < self.L:
+                yield (xx, y)
+        for i in [1, -1]:
+            yy = y + i
+            if 0 <= yy < self.L:
+                yield (x, yy)
+
+    def run_simulation(self):
+        while len(self.agents) > 0:
+            # for all agent, let them make the decision remove them from agents, add them
+            # to blacklist if they purchased, add their neighbors to agents if not they
+            # are in blacklist.
+
+            for agent in self.agents:
+                x, y = agent
+                p    = self.parents[x][y]
+                c    = self.children[x][y]
+                w    = self.weights[x][y]
+
+                # decision value
+                # decision = c * w + p * (1-w)
+                decision = p
+
+                self.agents.remove(agent)
+                self.blacklist.append(agent)
+
+                if decision < self.q:
+                    self.purchased[x][y] = True
+                    # adding the purchasers neighbors to the list
+                    for i in self.neighbors(agent, self.L):
+                        if i not in self.agents and i not in self.blacklist:
+                            self.agents.append(i)
+
+
+run1 = state(20, .2, 1e-5, 1e-3)
+for i in range(5000):
+    run1.gen_agents(10)
+    run1.run_simulation()
+    # print(run1.purchased)
+    # print(run1.is_percolating())
+    run1.update(10)
+    if i%50 == 0:
+        print(run1.q)
+
+
+# wild wild results, doesnt seem to be working for even the normal case
+# can you try to check if it works for the base case: only considering parents and not the
+# children?
