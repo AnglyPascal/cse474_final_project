@@ -7,7 +7,7 @@ import random as rnd
 
 
 class state:
-    def __init__(self, L, q, dp, dq):
+    def __init__(self, L, q, dp, dq, agent_num):
         self.L  = L
         self.q  = q
         self.dp = dp
@@ -18,55 +18,22 @@ class state:
         self.weights  = self.rng.rand(self.L, self.L)
         self.children = self.rng.rand(self.L, self.L)
 
+        self.agent_num = agent_num          # basic agent number
         self.agents    = []                 # these are the agents
-        self.blacklist = []                 # they have made their decisions
-        self.purchased = np.zeros((L, L))   # these have made purchases
-
-    def gen_agents(self, agent_num):        # generates some random agents
-        for i in range(agent_num):
-            pair = (rn.randint(self.L), rn.randint(self.L))
-            if pair not in self.agents:
-                self.agents.append(pair)
+        self.blacklist = np.zeros((self.L, self.L))
         
-    def is_percolating(self):               # checks if the current state is percolating
-        array = self.purchased
+        self.parcolating = None
+        self.purchased = None
 
-        top = False
-        bottom = False
+    def gen_agents(self):
+        self.agents = []
 
-        for i in array[0]:
-            if i == 1:
-                top = True
-
-        for i in array[-1]:
-            if i == 1:
-                bottom = True
-
-        if top and bottom:
-            return True
-        return False
-
-    def update(self, agent_num):
-        L = self.L
-        for i in range(L):
-            for j in range(L):
-                if self.purchased[i][j]:
-                    # self.children[i][j] += self.dp
-                    self.parents[i][j] += self.dp
-                else:
-                    # self.children[i][j] -= self.dp
-                    self.parents[i][j] -= self.dp
-
-        if self.is_percolating():
-            self.q -= self.dq
-        else:
-            self.q += self.dq
-
-        # resetting all the temporary stuffs
-        self.gen_agents(agent_num)
-        self.purchased = np.zeros((L, L))
-        self.blacklist = []
-
+        for i in range(self.agent_num):
+            x, y = (rn.randint(self.L), rn.randint(self.L))
+            if self.blacklist[x][y] == 0:
+                self.agents.append((x, y))
+                self.blacklist[x][y] = 1
+        
     def neighbors(self, pair, L):
         x, y = pair
         for i in [1, -1]:
@@ -78,11 +45,11 @@ class state:
             if 0 <= yy < self.L:
                 yield (x, yy)
 
-    def run_simulation(self):
+    def increment_time(self):
+        purchased = np.zeros((self.L, self.L))
+        self.gen_agents()
+
         while len(self.agents) > 0:
-            # for all agent, let them make the decision remove them from agents, add them
-            # to blacklist if they purchased, add their neighbors to agents if not they
-            # are in blacklist.
 
             for agent in self.agents:
                 x, y = agent
@@ -91,31 +58,73 @@ class state:
                 w    = self.weights[x][y]
 
                 # decision value
-                # decision = c * w + p * (1-w)
-                decision = p
+                decision = c * w + p * (1-w)
+                # decision = p
 
                 self.agents.remove(agent)
-                self.blacklist.append(agent)
 
                 if decision < self.q:
-                    self.purchased[x][y] = True
+                    purchased[x][y] = 1
                     # adding the purchasers neighbors to the list
-                    for i in self.neighbors(agent, self.L):
-                        if i not in self.agents and i not in self.blacklist:
-                            self.agents.append(i)
+                    for neighbor in self.neighbors(agent, self.L):
+                        xx, yy = neighbor
+                        if self.blacklist[xx][yy] == 0:
+                            self.agents.append(neighbor)
+                            self.blacklist[xx][yy] = 1
+
+        self.increment_values(purchased)
+
+        # resetting all the temporary stuffs
+        self.blacklist = np.zeros((self.L, self.L))
+        self.parcolating = None
+
+        self.purchased = purchased
 
 
-run1 = state(20, .2, 1e-5, 1e-3)
-for i in range(5000):
-    run1.gen_agents(10)
-    run1.run_simulation()
-    # print(run1.purchased)
-    # print(run1.is_percolating())
-    run1.update(10)
-    if i%50 == 0:
-        print(run1.q)
+    def increment_values(self, purchased):
+        if self.is_percolating(purchased):
+            self.q -= self.dq
+        else:
+            self.q += self.dq
+        
+        L = self.L
+        for i in range(L):
+            for j in range(L):
+                if purchased[i][j]:
+                    self.children[i][j] += self.dp
+                    # self.parents[i][j] += self.dp
+                else:
+                    self.children[i][j] -= self.dp
+                    # self.parents[i][j] -= self.dp
+    
+    def check_if_matches(self, a1, a2, n):
+        a = [0 for i in range(n+1)]
+        for i in a1:
+            a[i] = 1
+        for i in a2:
+            if i != 0 and a[i] == 1:
+                return True
+        return False
 
+    def is_percolating(self, array):
+        lw, num = mm.label(array)
+        t, b = lw[0], lw[-1]
 
-# wild wild results, doesnt seem to be working for even the normal case
-# can you try to check if it works for the base case: only considering parents and not the
-# children?
+        l, r = [], []
+        for i in range(self.L):
+            l.append(lw[i][0])
+            r.append(lw[i][-1])
+
+        if not self.check_if_matches(l, r, num) and not self.check_if_matches(t, b, num):
+            return False
+        return True
+    
+
+def simulate(state, time):
+    for i in range(time):
+        state.increment_time()
+        print(state.q)
+
+state = state(100, .5654, 0.00001, 0.0001, 100)
+simulate(state, 10000)
+
