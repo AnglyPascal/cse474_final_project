@@ -1,0 +1,25 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/a3c87ab5/
+__init__	system.py	/^    def __init__(self, L, q, dp, dq, agent_num=None):$/;"	m	class:state
+check_if_matches	system.py	/^    def check_if_matches(self, a1, a2, n):$/;"	m	class:state
+decision	system.py	/^    def decision(self, agent):$/;"	m	class:state
+gen_agents	system.py	/^    def gen_agents(self):$/;"	m	class:state
+increment_time	system.py	/^    def increment_time(self):$/;"	m	class:state
+increment_values	system.py	/^    def increment_values(self, purchased):$/;"	m	class:state
+is_percolating	system.py	/^    def is_percolating(self, array):$/;"	m	class:state
+mm	system.py	/^from scipy.ndimage import measurements as mm$/;"	x
+neighbors	system.py	/^    def neighbors(self, pair, L):$/;"	m	class:state
+np	system.py	/^import numpy as np$/;"	I
+plt	system.py	/^import matplotlib.pyplot as plt$/;"	I
+rn	system.py	/^import numpy.random as rn$/;"	I
+rnd	system.py	/^import random as rnd$/;"	I
+simulate	system.py	/^def simulate(state, time):$/;"	f
+sp	system.py	/^import simpy as sp$/;"	I
+state	system.py	/^class state:$/;"	c
+state	system.py	/^state = state(100, .5654, 0.00001, 0.0001, 100)$/;"	v

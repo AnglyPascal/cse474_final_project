@@ -50,7 +50,7 @@ class state:
         for i in [1, -1]:
             yy = y + i
             if 0 <= yy < self.L:
-                yto ield (x, yy)
+                yield (x, yy)
 
 
     # return the decision for a agent in the lattice
@@ -81,6 +81,7 @@ class state:
         while len(self.agents) > 0:
             for agent in self.agents:
                 self.agents.remove(agent)
+                x, y = agent
                 d = self.decision(agent)
 
                 if d < self.q:
@@ -91,6 +92,7 @@ class state:
                             self.agents.append(neighbor)
                             self.blacklist[xx][yy] = 1
 
+        # print(purchased)
         self.increment_values(purchased)
 
         # resetting all the temporary stuffs
@@ -120,37 +122,34 @@ class state:
                     self.children[i][j] -= self.dp
                     # self.parents[i][j] -= self.dp
     
-
-    # helper function for the check for percolating cluster
-    def check_if_matches(self, a1, a2, n):
-        a = [0 for i in range(n+1)]
-        for i in a1:
-            a[i] = 1
-        for i in a2:
-            if i != 0 and a[i] == 1:
-                return True
-        return False
-
-    # this returns true if the system is percolating, false otherwise
     def is_percolating(self, array):
-        lw, num = mm.label(array)
-        t, b = lw[0], lw[-1]
+        count= 0
+        for i in array:
+            for j in i:
+                count+= j
 
-        l, r = [], []
-        for i in range(self.L):
-            l.append(lw[i][0])
-            r.append(lw[i][-1])
-
-        if not self.check_if_matches(l, r, num) and not self.check_if_matches(t, b, num):
+        if 2*count >= self.L*self.L:
+            return True
+        else:
             return False
-        return True
+
     
 # now just run the system for a bounded number of times
-def simulate(state, time):
+def simulate(s, time):
     for i in range(time):
-        state.increment_time()
-        print(state.q)
+        s.increment_time()
+    print(s.q)
+    return s.q 
 
-state = state(100, .5654, 0.00001, 0.0001, 100)
-simulate(state, 10000)
+# simulate(state, 10000)
+# np.set_printoptions(precision=2)
+x = range(20)
+y = []
+for i in x:
+    s = state(100, .59, 0.0001, 0.001, 100)
+    y.append(simulate(s, 200))
+
+plt.plot(x, y)
+plt.savefig("100x100, 20")
+plt.show()
 
