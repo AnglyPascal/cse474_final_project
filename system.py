@@ -7,11 +7,12 @@ import random as rnd
 
 # system class, holds all the main functions and values
 class state:
-    def __init__(self, L, q, dp, dq, agent_num=None):
+    def __init__(self, L, q, dp, dq, ratio, agent_num=None):
         self.L  = L
         self.q  = q
         self.dp = dp
         self.dq = dq
+        self.ratio = ratio
 
         self.rng      = rn.RandomState(int(rnd.random()*100))
         self.parents  = self.rng.rand(self.L, self.L)
@@ -128,28 +129,29 @@ class state:
             for j in i:
                 count+= j
 
-        if 2*count >= self.L*self.L:
+        if count >= self.ratio*self.L*self.L:
             return True
         else:
             return False
 
-    
-# now just run the system for a bounded number of times
-def simulate(s, time):
-    for i in range(time):
-        s.increment_time()
-    print(s.q)
-    return s.q 
+    # runs the simulation and returns the final q value
+    def __call__(self, time):
+        for i in range(time):
+            self.increment_time()
+        print(s.q)
+        return self.q
 
-# simulate(state, 10000)
-# np.set_printoptions(precision=2)
-x = range(20)
-y = []
-for i in x:
-    s = state(100, .59, 0.0001, 0.001, 100)
-    y.append(simulate(s, 200))
 
-plt.plot(x, y)
-plt.savefig("100x100, 20")
-plt.show()
+L  = 200
+q  = .57
+dq = 0.001
+dp = 0.0001
+r  = .59
 
+x = [i/10 for i in range(1, 10)]
+z = range(1, 10)
+y=[]
+
+
+s = state(L, q, dp, dq, r)
+s(1000)
