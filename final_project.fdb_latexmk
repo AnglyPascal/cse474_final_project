@@ -1,9 +1,9 @@
 # Fdb version 3
-["pdflatex"] 1610091470 "final_project.tex" "final_project.pdf" "final_project" 1610091525
-  "/home/ahsan/texmf/tex/latex/local/sty/ahsan.sty" 1608213837 10201 3d9c55dc3c3bec21d9d636b18fdf088f ""
+["pdflatex"] 1610132271 "final_project.tex" "final_project.pdf" "final_project" 1610132281
+  "/home/ahsan/texmf/tex/latex/local/sty/ahsan.sty" 1610092866 10201 3d9c55dc3c3bec21d9d636b18fdf088f ""
   "/home/ahsan/texmf/tex/latex/local/sty/macros.sty" 1607271783 5922 c8349eacb89b48aa14709eb1828deacd ""
   "/home/ahsan/texmf/tex/latex/local/sty/mycolors.sty" 1607969103 6105 d98b7b0eebe002fb486058df4494e6a0 ""
-  "/home/ahsan/texmf/tex/latex/local/sty/tcbs.sty" 1608376162 18135 1216a44cbf381133d18e789fc1a88f69 ""
+  "/home/ahsan/texmf/tex/latex/local/sty/tcbs.sty" 1610128013 18135 77881cd65dc7b989d91c023467a6bc88 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1607249373 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1607249373 2172 fd0c924230362ff848a33632ed45dc23 ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/times/ptmri7t.tfm" 1607249373 2288 f478fc8fed18759effb59f3dad7f3084 ""
@@ -200,11 +200,15 @@
   "/usr/share/texmf-dist/tex/latex/zref/zref-base.sty" 1607185936 20688 beaddf14d96104d4bf016523be5395c5 ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1607249373 33301 a3134070eacafb10b1f371612ce2650d ""
   "/var/lib/texmf/web2c/xetex/xelatex.fmt" 1610091469 5313611 311b0ce590073c01bd958ced1bbaf5cd ""
-  "final_project.aux" 1610091524 4148 e7116f4124d86afb241123e1e2fe052d "pdflatex"
-  "final_project.out" 1610091524 670 8e2d5ba99d89e2d7e099cf97b7900808 "pdflatex"
-  "final_project.tex" 1610091074 10306 7d8d3fd80bc78359fa72b604c88ea0ce ""
+  "final_project.aux" 1610132280 4145 794001c73a5195d51f06e9514e8e1e6c "pdflatex"
+  "final_project.out" 1610132280 681 f06a74078f62f64e9057007f36f7a1aa "pdflatex"
+  "final_project.tex" 1610132270 11674 e2f3bd5758cc1f19f06f920acd1be205 ""
+  "q_converges_L100_q575_r5_num10_dq1e-4.png" 1610093576 72186 528c8600de7250e816d8eaecf41e073d ""
+  "q_converges_L200_q575_r5_num3_dq1e-5.png" 1610091548 24843 feba09b2ccfbfe45d4cdf9aefcd0582c ""
+  "ratio_vs_qq.png" 1610127034 20215 9fb7a3bc90d5961f678e8196eea5703d ""
+  "ratio_vs_qqq.png" 1610127031 20510 44655c55ce8997bb1d8b094009b9e3f2 ""
   (generated)
+  "final_project.log"
   "final_project.out"
   "final_project.pdf"
   "final_project.aux"
-  "final_project.log"
