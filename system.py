@@ -135,23 +135,31 @@ class state:
             return False
 
     # runs the simulation and returns the final q value
-    def __call__(self, time):
+    def __call__(self, time, increment):
         for i in range(time):
             self.increment_time()
-        print(s.q)
-        return self.q
+            if i % increment == 0:
+                yield self.q 
+                print(self.q)
 
 
-L  = 200
-q  = .57
-dq = 0.001
-dp = 0.0001
-r  = .59
+L   = 100
+q   = .575
+dq  = 0.0001
+dp  = 0.000001
+r   = .5
+num = 10
 
-x = [i/10 for i in range(1, 10)]
-z = range(1, 10)
-y=[]
+x = np.linspace(1, 500, 50)
+y = []
 
+for i in range(num):
+    s = state(L, q, dp, dq, r)
 
-s = state(L, q, dp, dq, r)
-s(1000)
+    for i in s(500, 10):
+        y.append(i)
+        
+    plt.plot(x, y)
+    y = []
+
+plt.savefig('q_converges_L100_q575_r5_num10_dq1e-4.png')
