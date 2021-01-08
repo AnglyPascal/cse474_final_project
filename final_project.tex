@@ -3,11 +3,30 @@
 
 \pagestyle{empty}
 \title{\vspace{-3em}Final Project Review\vspace{-1em}}
+\author{}
 
 
 \begin{document}
 
 \maketitle
+\thispagestyle{empty}
+
+\begin{minipage}[t]{.32\linewidth}
+    M Ahsan Al Mahir\\
+    ahsan.al.mahir@g.bracu.ac.bd\\
+    20216007\\
+\end{minipage}\hfill%
+\begin{minipage}[t]{.38\linewidth}
+    Atonu Roy Chowdhury\\
+    atonu.roy.chowdhury@g.bracu.ac.bd\\
+    20216008\\
+\end{minipage}\hfill%
+\begin{minipage}[t]{.29\linewidth}
+    Ekram Wasi Shatil\\
+    ekram.wasi.shatil@g.bracu.ac.bd\\
+    16301072
+\end{minipage}
+
 
 
 \chapter{Abstract}
@@ -43,7 +62,7 @@ This simulation is important to predict the system's behavior and take decisions
 accordingly. Using this model with information from previous sales, companies can predict
 the success rate of a given product.
 
-
+\newpage
 \chapter{Model Formulation}
 
 \section{Write down the questions you asked to understand the system?}
@@ -157,7 +176,7 @@ Stauffer, D (2000).
 URL: \url{https://www.sciencedirect.com/science/article/abs/pii/S0378437199005439}
 
 
-
+\newpage
 \chapter{Implementation and Output Analysis}
 
 \section{Implementation of the Model}
@@ -207,19 +226,44 @@ criterions. Then we run the same simulation again.
 
 The code can be found at \url{https://github.com/AnglyPascal/cse474_final_project/}
 
+\section{Result Analysis}
 
-\chapter{Result Analysis}
+The final value of \(q\) converges regardless of weights and parents'- childrens' preferences.
+The following graph shows the convergence for \(r=.5, L=100, q=.575, dq=1e-4\) for ten random systems.
 
-As seen in the following figure for \(r=.59, L=100, \) initial \(q = .57\), \(dq = 0.0001,
-dp = 0.000001\), the final value of \(q\) converges regardless of weights and parents' -
-childrens' preferences. 
+\begin{center}
+    \includegraphics[scale=0.6]{q_converges_L100_q575_r5_num10_dq1e-4.png}
 
+    This figure shows the convergence of \(q\) as time increases in \(10\) lattices
+    of size \(100\times 100\) with starting value of \(q=.575\).
+\end{center}
 
-The following graph shows the convergence for \(r=.5, L=200, q=.575, dq =1e-5, dp=1e-6\)
-for three random systems.
+\begin{center}
+    \includegraphics[scale=0.6]{q_converges_L200_q575_r5_num3_dq1e-5.png}
 
+    This figure shows the convergence for \(3\) random lattices of size \(200\times 200\)
+    with values \(r=.5, q=.57, dq = 1e-4\)
+\end{center}
 
-The following graph shows the value of 
+In the following graph, we see how the value of \(q\) evolves with our definition of
+percolation based on density. As the value of \(r\) goes from \(0\) to \(q\), the value of
+\(q\) increases from \(.4\) to \(1\).
+
+\begin{minipage}{.5\linewidth}
+    \includegraphics[width=.9\linewidth]{ratio_vs_qqq.png}
+
+    \begin{center}
+        \(L=100\), for \(100\) values of \(r\)
+    \end{center}
+\end{minipage}\hfill%
+\begin{minipage}{.5\linewidth}
+    \includegraphics[width=.9\linewidth]{ratio_vs_qq.png}
+
+    \begin{center}
+        \(L=200\), for \(10\) values of \(r\)
+    \end{center}
+\end{minipage}
+
 
 
 \section{Validation and Verification}
@@ -254,6 +298,7 @@ Our model could be further improved by taking the following factors into account
     \item Multiple sibling scenarios
     \item Children's age factor
 \end{enumerate}
+
 
 
 
