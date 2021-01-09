@@ -108,7 +108,7 @@ class state:
     # whether percolating or purchased
     #
     def increment_values(self, purchased):
-        if self.is_percolating(purchased):
+        if self.spanning(purchased):
             self.q -= self.dq
         else:
             self.q += self.dq
@@ -123,7 +123,7 @@ class state:
                     self.children[i][j] -= self.dp
                     # self.parents[i][j] -= self.dp
     
-    def is_percolating(self, array):
+    def density(self, array):
         count= 0
         for i in array:
             for j in i:
@@ -134,23 +134,34 @@ class state:
         else:
             return False
 
+    def spanning(self, array):
+        lw, num = mm.label(array)
+        a1, a2 = lw[0,:], lw[-1,:]
+
+        perc_x = np.intersect1d(a1, a2)
+        perc = perc_x[np.where(perc_x>0)]
+        if len(perc)>0:
+            return True
+        return False
+
+
     # runs the simulation and returns the final q value
     def __call__(self, time, increment):
         for i in range(time):
             self.increment_time()
             if i % increment == 0:
                 yield self.q 
-                print(self.q)
+            print(self.q)
 
 
 L   = 100
-q   = .575
-dq  = 0.0001
+q   = .5
+dq  = 0.001
 dp  = 0.000001
 r   = .5
 num = 10
 
-x = np.linspace(1, 500, 50)
+x = np.linspace(1, 220, 50)
 y = []
 
 for i in range(num):
@@ -162,4 +173,5 @@ for i in range(num):
     plt.plot(x, y)
     y = []
 
-plt.savefig('q_converges_L100_q575_r5_num10_dq1e-4.png')
+# plt.savefig('q_converges_spanning_L50_q575_r5_num10_dq1e-4.png')
+plt.show()
