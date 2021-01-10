@@ -228,45 +228,117 @@ The code can be found at \url{https://github.com/AnglyPascal/cse474_final_projec
 
 \section{Result Analysis}
 
-The final value of \(q\) converges regardless of weights and parents'- childrens' preferences.
-The following graph shows the convergence for \(r=.5, L=100, q=.575, dq=1e-4\) for ten random systems.
 
-\begin{center}
-    \includegraphics[scale=0.6]{q_converges_L100_q575_r5_num10_dq1e-4.png}
+We ran multiple tests for different values of \(L\), mostly from the set \(\left\{50, 100,
+150, 200\right\}\), with different values of \(q \in \left\{.3, .4, .5, .55, .575, .5755, .6,
+, .7\right\}\), different values of \(dq, dp\), with a time limit of \(100-1000\) steps.
+Because of the limited resources, we couldn't conduct simulation with higher lattices or
+for smaller values of \(dq\) with longer period of times. But in all of our test cases,
+the value of \(q\) converged to a small interval of length \(.02\).
 
-    This figure shows the convergence of \(q\) as time increases in \(10\) lattices
-    of size \(100\times 100\) with starting value of \(q=.575\).
-\end{center}
+As for the ratio of \(r=.5\), the interval for \(q\) for \(L=100\) was \([.566, .580]\).
+This was true for starting values of \(q \in \left\{.3, .5, .57, .7\right\}\). The graph
+below shows how \(q\) evoleved during the \(500\) time increment from a starting value of
+\(.575\) on a lattice of size \(100\times 100\), \(dq = 1e-4, dp =1e-6\).
 
-\begin{center}
-    \includegraphics[scale=0.6]{q_converges_L200_q575_r5_num3_dq1e-5.png}
+\begin{minipage}{.7\linewidth}
+    \begin{center}
+        \includegraphics[width=.9\linewidth]{q_converges_L100_q575_r5_num10_dq1e-4.png}
+    \end{center}
+\end{minipage}\hfill%
+\begin{minipage}{.29\linewidth}
+    This \(q\) vs time graph shows the convergence of \(q\) as time increases in
+    \(10\) lattices of size \(100\times 100\) with starting value of \(q=.575\).
+\end{minipage}
 
-    This figure shows the convergence for \(3\) random lattices of size \(200\times 200\)
-    with values \(r=.5, q=.57, dq = 1e-4\)
-\end{center}
+
+The following graph plots the same for \(200 \times 200\) lattice with a total runtime
+of \(1000\), with starting value of \(q=.575\), \(dq = 1e-5, dp =1e-7\) and
+ratio\(=.5\).
+
+\begin{minipage}{.7\linewidth}
+    \begin{center}
+    \includegraphics[width=.9\linewidth]{q_converges_L200_q575_r5_num3_dq1e-5.png}
+    \end{center}
+\end{minipage}\hfill%
+\begin{minipage}{.29\linewidth}
+    This \(q\) vs time graph shows the convergence for \(3\) random lattices of size
+    \(200\times 200\) with values \(r=.5, q=.57, dq = 1e-4\)
+\end{minipage}
+
+In the following graph we plotted the convergence of \(10\) lattices of size \(400x400\).
+The running time was \(500\) with initial values \(q=.575\). We find an even tighter
+bound for the final value of \(q\), that is \([.5730, .5765]\)
+
+\begin{minipage}{.7\linewidth}
+    \begin{center}
+    \includegraphics[width=.9\linewidth]{400x400.png}
+    \end{center}
+\end{minipage}\hfill%
+\begin{minipage}{.29\linewidth}
+    This \(q\) vs time graph shows the convergence for \(10\) random lattices of size
+    \(400\times 400\) with values \(r=.5, q=.575, dq = 1e-5\)
+\end{minipage}
 
 In the following graph, we see how the value of \(q\) evolves with our definition of
 percolation based on density. As the value of \(r\) goes from \(0\) to \(q\), the value of
 \(q\) increases from \(.4\) to \(1\).
 
 \begin{minipage}{.5\linewidth}
-    \includegraphics[width=.9\linewidth]{ratio_vs_qqq.png}
-
     \begin{center}
-        \(L=100\), for \(100\) values of \(r\)
+        \includegraphics[width=.9\linewidth]{ratio_vs_qqq.png}
+        density ratio vs final \(q\) graph for lattice size \(L=100\), initial \(q=.5\). 
     \end{center}
 \end{minipage}\hfill%
 \begin{minipage}{.5\linewidth}
-    \includegraphics[width=.9\linewidth]{ratio_vs_qq.png}
-
     \begin{center}
-        \(L=200\), for \(10\) values of \(r\)
+        \includegraphics[width=.9\linewidth]{ratio_vs_qq.png}
+        density ratio vs final \(q\) graph for lattice size \(L=200\), initial \(q=.5\). 
     \end{center}
 \end{minipage}
 
+The surprising fact about this result is that even if \(r\) is closer to \(0\), the final
+value of \(q\) is never below \(.3\), which is counter intuitive. But this happens
+probably because the system actually updates the values of \texttt{parents} which makes
+the value of \(q\) go up. Another reason might be that we weren't able to simulate the
+system for more than \(200\) times for each of the lattices because of our infrastructural
+limitations, so the value of \(q\) could've reached \(0\) if we had given it enough time.
+
+
+If we used the spanning cluster method in the place of density method, we get something
+like the following plot:
+
+\begin{minipage}{.65\linewidth}
+    \begin{center}
+    \includegraphics[width=1\linewidth]{q_converges_spanning_L50_q575_r5_num10_dq1e-4.png}
+    \end{center}
+\end{minipage}\hfill%
+\begin{minipage}{.34\linewidth}
+    \(q\) vs \(time\) plot for \(L=100, r=.5, dq = 1e-4\), initial \(q = .575\) using
+    spanning cluster check for perconaltion.
+\end{minipage}
+
+As seen in the figure above, using the spanning clusters produces really smooth results.
+But real life situations aren't like this. 
+
+Our explanation for why this happens is: since \texttt{parents} is changing based on the
+purchase they make, their value gets closer to the percolation threshold. However, the
+spaning clusters doesn't really change that much. There might be a value \(c\) such that
+if \(q = c- \epsilon\), then there is no spanning cluster, but if \(q = c+\epsilon\), then
+suddenly there is one. And so in the simulation, the value of \(q\) oscillates between
+these two values, while the values of \texttt{parents} strenghten this situation.
+
+But by using density analysis, we can randomize this problem further. Because the set of
+purchased can be very random, and thats what makes whether \(q\) increases or decreases,
+the population has more control over the product value.
 
 
 \section{Validation and Verification}
+
+Out initial prediction for this model was that the values of \(q\) should converge over
+time, and it should be depended on the ratio value. If our predictions were correct, then
+this model could be used to predict whether a product would be successful of not based on
+people's reaction to previous similar products. 
 
 \textbf{Verification:}
 
